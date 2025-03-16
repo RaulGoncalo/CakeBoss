@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val tabItems = listOf(
-            TabItem(TabItem.TITLE_SCHEDULE, Icons.Outlined.DateRange, Icons.Filled.DateRange),
+            TabItem(TabItem.TITLE_SCHEDULES, Icons.Outlined.DateRange, Icons.Filled.DateRange),
             TabItem(TabItem.TITLE_CLIENTS, Icons.Outlined.People, Icons.Filled.People),
             TabItem(TabItem.TITLE_RECEIPTS, Icons.Outlined.Receipt, Icons.Filled.Receipt),
             TabItem(
