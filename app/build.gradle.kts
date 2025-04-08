@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -49,6 +50,7 @@ dependencies {
 
     //ROOM
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
     /// ViewModel
@@ -59,7 +61,7 @@ dependencies {
     /// LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
     // Lifecycle utilities for Compose
-    implementation(libs.androidx.lifecycle.runtime.compose)//observeAsState
+    implementation(libs.androidx.runtime.livedata)//observeAsState
 
     //Fragment KTX
     implementation(libs.androidx.fragment.ktx)//by viewModels()

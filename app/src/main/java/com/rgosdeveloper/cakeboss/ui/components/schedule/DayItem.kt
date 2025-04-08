@@ -60,7 +60,7 @@ fun DayItem(
                 )
             }
 
-            var colorIfHasOrders = if (hasOrders) Color(0xFFE91E63) else Color.Transparent
+            var colorIfHasOrders = if (hasOrders) Color(0xFFFF9800) else Color.Transparent
 
             Box(
                 modifier = Modifier

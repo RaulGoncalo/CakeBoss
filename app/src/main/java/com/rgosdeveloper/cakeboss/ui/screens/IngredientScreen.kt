@@ -19,6 +19,7 @@ fun IngredientScreen(
     onDelete: (ingredient: Ingredient) -> Unit,
     onEdit: (ingredient: Ingredient) -> Unit
 ) {
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()

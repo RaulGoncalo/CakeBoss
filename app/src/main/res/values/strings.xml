@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CakeBoss</string>
+    <string name="title_activity_ingredient">IngredientActivity</string>
+    <string name="title_activity_schedule">ScheduleActivity</string>
+    <string name="title_activity_client">ClientActivity</string>
+    <string name="title_activity_receipt">ReceiptActivity</string>
 </resources>
