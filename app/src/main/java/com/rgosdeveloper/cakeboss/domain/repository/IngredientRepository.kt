@@ -1,4 +1,4 @@
-package com.rgosdeveloper.cakeboss.data.repository
+package com.rgosdeveloper.cakeboss.domain.repository
 
 import com.rgosdeveloper.cakeboss.data.entitys.IngredientEntity
 import com.rgosdeveloper.cakeboss.domain.common.ResultStateOperation

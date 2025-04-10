@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgosdeveloper.cakeboss.data.repository.IngredientRepository
+import com.rgosdeveloper.cakeboss.domain.repository.IngredientRepository
 import com.rgosdeveloper.cakeboss.domain.common.ResultStateOperation
 import com.rgosdeveloper.cakeboss.domain.models.Ingredient
 import com.rgosdeveloper.cakeboss.domain.models.toIngredientEntity
@@ -28,10 +28,12 @@ class IngredientViewModel @Inject constructor(
 
     fun insertIngredient(ingredient: Ingredient) {
         viewModelScope.launch {
+            _insertIngredient.value = ResultStateOperation.Loading
+
             val id = repository.insertIngredient(ingredient.toIngredientEntity())
 
-            _insertIngredient.value = ResultStateOperation.Loading
             _insertIngredient.value = if (id is ResultStateOperation.Success) {
+                readAllIngredients()
                 ResultStateOperation.Success("Ingrediente inserido com sucesso")
             } else {
                 ResultStateOperation.Error(Exception("Erro ao inserir ingrediente"))
@@ -40,14 +42,22 @@ class IngredientViewModel @Inject constructor(
     }
 
     fun deleteIngredient(ingredient: Ingredient) {
+        if (ingredient.id == null) {
+            _deleteIngredient.value = ResultStateOperation.Error(Exception("Ingrediente não existe"))
+            return
+        }
+
+        _deleteIngredient.value = ResultStateOperation.Loading
         viewModelScope.launch {
             val id = repository.deleteIngredient(ingredient.toIngredientEntity())
 
             _deleteIngredient.value = ResultStateOperation.Loading
             _deleteIngredient.value = if (id is ResultStateOperation.Success) {
+                // Atualiza a lista após deletar com sucesso
+                readAllIngredients()
                 ResultStateOperation.Success("Ingrediente deletado com sucesso")
             } else {
-                ResultStateOperation.Error(Exception("Erro ao inserir ingrediente"))
+                ResultStateOperation.Error(Exception("Erro ao deletar ingrediente"))
             }
         }
     }

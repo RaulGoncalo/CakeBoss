@@ -1,10 +1,9 @@
 package com.rgosdeveloper.cakeboss.data.repository
 
 import com.rgosdeveloper.cakeboss.data.daos.IngredientDAO
-import com.rgosdeveloper.cakeboss.data.database.CustomDatabase
 import com.rgosdeveloper.cakeboss.data.entitys.IngredientEntity
 import com.rgosdeveloper.cakeboss.domain.common.ResultStateOperation
-import com.rgosdeveloper.cakeboss.domain.models.Ingredient
+import com.rgosdeveloper.cakeboss.domain.repository.IngredientRepository
 import javax.inject.Inject
 
 class IngredientRepositoryImpl @Inject constructor(

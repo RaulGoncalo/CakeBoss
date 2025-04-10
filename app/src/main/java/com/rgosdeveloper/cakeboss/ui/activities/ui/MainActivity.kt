@@ -1,4 +1,4 @@
-package com.rgosdeveloper.cakeboss.ui.activities
+package com.rgosdeveloper.cakeboss.ui.activities.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.outlined.DateRange
@@ -34,15 +35,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.rgosdeveloper.cakeboss.domain.common.ResultStateOperation
 import com.rgosdeveloper.cakeboss.domain.models.Client
+import com.rgosdeveloper.cakeboss.domain.models.Ingredient
 import com.rgosdeveloper.cakeboss.domain.models.Recipe
 import com.rgosdeveloper.cakeboss.domain.models.Schedule
+import com.rgosdeveloper.cakeboss.ui.activities.ClientActivity
+import com.rgosdeveloper.cakeboss.ui.activities.IngredientRegisterActivity
+import com.rgosdeveloper.cakeboss.ui.activities.ReceiptActivity
+import com.rgosdeveloper.cakeboss.ui.activities.ScheduleActivity
+import com.rgosdeveloper.cakeboss.ui.components.common.CustomDialog
 import com.rgosdeveloper.cakeboss.ui.components.common.CustomTopBar
+import com.rgosdeveloper.cakeboss.ui.components.common.Tabs
 import com.rgosdeveloper.cakeboss.ui.models.TabItem
 import com.rgosdeveloper.cakeboss.ui.screens.ClientScreen
 import com.rgosdeveloper.cakeboss.ui.screens.IngredientScreen
@@ -52,7 +63,6 @@ import com.rgosdeveloper.cakeboss.ui.theme.CakeBossTheme
 import com.rgosdeveloper.cakeboss.ui.viewmodels.IngredientViewModel
 import com.rgosdeveloper.cakeboss.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -93,35 +103,7 @@ class MainActivity : ComponentActivity() {
                         FloatingActionButton(
                             onClick = {
                                 var index = pagerState.currentPage
-                                when (index) {
-                                    0 -> startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            ScheduleActivity::class.java
-                                        )
-                                    )
-
-                                    1 -> startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            ClientActivity::class.java
-                                        )
-                                    )
-
-                                    2 -> startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            ReceiptActivity::class.java
-                                        )
-                                    )
-
-                                    3 -> startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            IngredientRegisterActivity::class.java
-                                        )
-                                    )
-                                }
+                                returnActivityByCurrentPage(index)
                             }
                         ) {
                             Icon(Icons.Default.Add, contentDescription = null)
@@ -141,42 +123,53 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
+    private fun returnActivityByCurrentPage(index: Int) {
+        when (index) {
+            0 -> startActivity(
+                Intent(
+                    applicationContext,
+                    ScheduleActivity::class.java
+                )
+            )
+
+            1 -> startActivity(
+                Intent(
+                    applicationContext,
+                    ClientActivity::class.java
+                )
+            )
+
+            2 -> startActivity(
+                Intent(
+                    applicationContext,
+                    ReceiptActivity::class.java
+                )
+            )
+
+            3 -> startActivity(
+                Intent(
+                    applicationContext,
+                    IngredientRegisterActivity::class.java
+                )
+            )
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         ingredientViewModel.readAllIngredients()
     }
 
 
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    fun Tabs(tabItems: List<TabItem>, pagerState: PagerState, coroutineScope: CoroutineScope) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage
-        ) {
-            tabItems.forEachIndexed { index, tabItem ->
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = { Text(text = tabItem.title, fontSize = 10.sp) },
-                    icon = {
-                        Icon(
-                            imageVector = if (pagerState.currentPage == index) tabItem.selectedIcon else tabItem.unselectedIcon,
-                            contentDescription = tabItem.title
-                        )
-                    }
-                )
-            }
-        }
-    }
+
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun PagerContent(tabItems: List<TabItem>, pagerState: PagerState) {
         val ingredientsState by ingredientViewModel.ingredients.observeAsState()
+        var openAlertDialog by remember { mutableStateOf(false) }
+        var ingredientToDelete by remember { mutableStateOf<Ingredient?>(null) }
 
         HorizontalPager(
             state = pagerState,
@@ -187,7 +180,6 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-
                 when (index) {
                     0 -> ScheduleScreen(
                         sampleOrders,
@@ -255,21 +247,42 @@ class MainActivity : ComponentActivity() {
                     3 -> IngredientScreen(
                         ingredients = when (val result = ingredientsState) {
                             is ResultStateOperation.Success -> result.value
-                            else -> emptyList()  // Caso esteja carregando ou tenha erro
+                            else -> emptyList()
                         },
                         onEdit = { ingredient ->
-                            val intent =
-                                Intent(applicationContext, IngredientRegisterActivity::class.java)
+                            val intent = Intent(applicationContext, IngredientRegisterActivity::class.java)
                             intent.putExtra(Constants.PUT_EXTRA_INGREDIENT, ingredient)
                             startActivity(intent)
                         },
                         onDelete = { ingredient ->
-                            ingredientViewModel.deleteIngredient(ingredient)
-                            ingredientViewModel.readAllIngredients()
+                            ingredientToDelete = ingredient
+                            openAlertDialog = true
                         }
                     )
                 }
             }
         }
+
+        if (openAlertDialog && ingredientToDelete != null) {
+            CustomDialog(
+                dialogTitle = "Deletar Ingrediente",
+                dialogText = "Você tem certeza que deseja deletar o ingrediente ",
+                dialogaFancyText = "${ingredientToDelete!!.name}?",
+                onConfirmation = {
+                    ingredientViewModel.deleteIngredient(ingredientToDelete!!)
+                    Toast.makeText(
+                        applicationContext,
+                        "Deletando ${ingredientToDelete!!.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    openAlertDialog = false
+                },
+                onDismissRequest = {
+                    openAlertDialog = false
+                },
+                icon = Icons.Default.Delete
+            )
+        }
     }
+
 }

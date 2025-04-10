@@ -18,29 +18,29 @@
         <activity
             android:name=".ui.activities.ReceiptActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName=".ui.activities.ui.MainActivity"
             android:label="@string/title_activity_receipt"
             android:theme="@style/Theme.CakeBoss" />
         <activity
             android:name=".ui.activities.ClientActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName=".ui.activities.ui.MainActivity"
             android:label="@string/title_activity_client"
             android:theme="@style/Theme.CakeBoss" />
         <activity
             android:name=".ui.activities.ScheduleActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName=".ui.activities.ui.MainActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/Theme.CakeBoss" />
         <activity
             android:name=".ui.activities.IngredientRegisterActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.MainActivity"
+            android:parentActivityName=".ui.activities.ui.MainActivity"
             android:label="@string/title_activity_ingredient"
             android:theme="@style/Theme.CakeBoss" />
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CakeBoss">

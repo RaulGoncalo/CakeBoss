@@ -3,7 +3,7 @@ package com.rgosdeveloper.cakeboss.di
 import android.content.Context
 import com.rgosdeveloper.cakeboss.data.daos.IngredientDAO
 import com.rgosdeveloper.cakeboss.data.database.CustomDatabase
-import com.rgosdeveloper.cakeboss.data.repository.IngredientRepository
+import com.rgosdeveloper.cakeboss.domain.repository.IngredientRepository
 import com.rgosdeveloper.cakeboss.data.repository.IngredientRepositoryImpl
 import dagger.Module
 import dagger.Provides
