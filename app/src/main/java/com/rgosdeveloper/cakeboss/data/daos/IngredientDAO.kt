@@ -21,4 +21,7 @@ interface IngredientDAO {
 
     @Query("SELECT * FROM ${Constants.Database.TABLE_NAME_INGREDIENTS}")
     suspend fun readAll(): List<IngredientEntity>
+
+    @Query("SELECT * FROM ${Constants.Database.TABLE_NAME_INGREDIENTS} WHERE ${Constants.Database.COLUMN_INFO_ID_INGREDIENT} = :id")
+    suspend fun readIngredient(id: Int): IngredientEntity
 }

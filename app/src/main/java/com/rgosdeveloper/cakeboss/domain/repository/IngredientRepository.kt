@@ -7,5 +7,6 @@ interface IngredientRepository {
     suspend fun insertIngredient(ingredient: IngredientEntity): ResultStateOperation<Long>
     suspend fun deleteIngredient(ingredient: IngredientEntity): ResultStateOperation<Int>
     suspend fun updateIngredient(ingredient: IngredientEntity): ResultStateOperation<Int>
-    suspend fun realAllIngredients(): ResultStateOperation<List<IngredientEntity>>
+    suspend fun readAllIngredients(): ResultStateOperation<List<IngredientEntity>>
+    suspend fun readIngredientById(id: Int): ResultStateOperation<IngredientEntity>
 }

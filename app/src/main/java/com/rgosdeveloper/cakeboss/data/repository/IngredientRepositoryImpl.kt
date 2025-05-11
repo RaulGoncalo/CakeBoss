@@ -49,7 +49,7 @@ class IngredientRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun realAllIngredients(): ResultStateOperation<List<IngredientEntity>> {
+    override suspend fun readAllIngredients(): ResultStateOperation<List<IngredientEntity>> {
         try {
             val ingredients = ingredientDAO.readAll()
             if(ingredients != null){
@@ -59,6 +59,19 @@ class IngredientRepositoryImpl @Inject constructor(
             }
         }catch (errorReadRoom: Exception){
             return ResultStateOperation.Error(errorReadRoom)
+        }
+    }
+
+    override suspend fun readIngredientById(id: Int): ResultStateOperation<IngredientEntity> {
+        try {
+            val ingredient = ingredientDAO.readIngredient(id)
+            if(ingredient != null){
+                return ResultStateOperation.Success(ingredient)
+            }else{
+                return ResultStateOperation.Error(Exception("Erro ao buscar ingrediente"))
+            }
+        }catch (errorDeleteRoom: Exception){
+            return ResultStateOperation.Error(errorDeleteRoom)
         }
     }
 

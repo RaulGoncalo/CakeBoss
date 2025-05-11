@@ -16,31 +16,26 @@
         android:theme="@style/Theme.CakeBoss"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.ReceiptActivity"
+            android:name=".presentation.activities.ReceiptActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.ui.MainActivity"
+            android:parentActivityName=".presentation.activities.MainActivity"
             android:label="@string/title_activity_receipt"
             android:theme="@style/Theme.CakeBoss" />
         <activity
-            android:name=".ui.activities.ClientActivity"
+            android:name=".presentation.activities.ClientActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.ui.MainActivity"
+            android:parentActivityName=".presentation.activities.MainActivity"
             android:label="@string/title_activity_client"
             android:theme="@style/Theme.CakeBoss" />
         <activity
-            android:name=".ui.activities.ScheduleActivity"
+            android:name=".presentation.activities.ScheduleActivity"
             android:exported="false"
-            android:parentActivityName=".ui.activities.ui.MainActivity"
+            android:parentActivityName=".presentation.activities.MainActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/Theme.CakeBoss" />
+
         <activity
-            android:name=".ui.activities.IngredientRegisterActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.activities.ui.MainActivity"
-            android:label="@string/title_activity_ingredient"
-            android:theme="@style/Theme.CakeBoss" />
-        <activity
-            android:name=".ui.activities.ui.MainActivity"
+            android:name=".presentation.activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CakeBoss">
